@@ -1,0 +1,60 @@
+{
+  "name": "sveltekit-logger",
+  "version": "0.1.0",
+  "description": "Zero-code, pluggable request/console log inspector for SvelteKit. Captures API calls, server-side fetches and console output with file:line initiators — no per-call code needed.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "svelte",
+    "sveltekit",
+    "logs",
+    "inspector",
+    "terminal",
+    "debugging",
+    "vite-plugin"
+  ],
+  "svelte": "./src/components/index.js",
+  "exports": {
+    ".": {
+      "svelte": "./src/components/index.js",
+      "default": "./src/components/index.js"
+    },
+    "./plugin": "./src/plugin/index.ts",
+    "./server": "./src/server/index.ts",
+    "./client": "./src/client/index.ts",
+    "./components": {
+      "svelte": "./src/components/index.js",
+      "default": "./src/components/index.js"
+    },
+    "./theme.css": "./src/components/theme.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tailwindcss -i ./src/components/theme.input.css -o ./src/components/theme.css --content \"./src/components/**/*.svelte\"",
+    "build:min": "tailwindcss -i ./src/components/theme.input.css -o ./src/components/theme.css --content \"./src/components/**/*.svelte\" --minify",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
+  },
+  "peerDependencies": {
+    "@sveltejs/kit": "^2.0.0",
+    "svelte": "^5.0.0"
+  },
+  "dependencies": {
+    "@iconify-icons/lucide": "^1.2.0",
+    "@iconify/svelte": "^5.2.2"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@tailwindcss/cli": "^4.0.0",
+    "@types/node": "^24.0.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
