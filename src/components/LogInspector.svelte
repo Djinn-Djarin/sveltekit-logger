@@ -16,10 +16,10 @@
 		moon,
 		trash2,
 		settings,
-		panelBottomClose,
-		panelBottomOpen,
-		maximize2,
-		minimize2
+		chevronDown,
+		chevronUp,
+		maximize,
+		minimize
 	} from './icons.js';
 	import {
 		columns,
@@ -37,8 +37,10 @@
 
 	interface Props {
 		class?: string;
+		showLayoutControls?: boolean;
+		showActionButtons?: boolean;
 	}
-	let { class: className = '' }: Props = $props();
+	let { class: className = '', showLayoutControls = true, showActionButtons = true }: Props = $props();
 
 	let searchQuery = $state('');
 	let filterTag = $state('ALL');
@@ -286,18 +288,6 @@
 	});
 </script>
 
-{#if collapsed}
-	<div class="flex items-center gap-2 px-3 h-9 shrink-0 bg-theme-surface border-b border-theme-border {isDark ? '' : 'li-light'}">
-		<button
-			onclick={() => (collapsed = false)}
-			class="p-1 text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-panel rounded cursor-pointer transition-colors"
-			title="Expand inspector"
-		>
-			<Icon icon={panelBottomOpen} class="h-3.5 w-3.5" />
-		</button>
-		<span class="text-[10px] uppercase tracking-wide text-theme-text-muted font-semibold">Log Inspector</span>
-	</div>
-{:else}
 <div class="w-full h-full flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden bg-theme-bg {className} {isDark ? '' : 'li-light'} {fullscreen ? '!fixed !inset-0 !z-[9999] !h-screen !w-screen' : ''}">
 	<!-- Toast -->
 	{#if toastMsg}
@@ -481,6 +471,7 @@
 		{/if}
 
 		<!-- Action buttons (copy, clear, fullscreen, collapse) -->
+		{#if showActionButtons}
 		<div class="relative flex items-center gap-1 ml-auto shrink-0">
 			<button
 				onclick={(e) => copyText($terminalStore.map((l) => `[${l.timestamp}] ${l.message}${l.details ? '\n' + l.details : ''}`).join('\n\n'), e)}
@@ -496,24 +487,28 @@
 			>
 				<Icon icon={trash2} class="h-3.5 w-3.5" />
 			</button>
+			{#if showLayoutControls}
 			<button
 				onclick={toggleFullscreen}
 				class="p-1 text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-panel rounded cursor-pointer transition-colors"
 				title={fullscreen ? 'Exit fullscreen' : 'Fullscreen'}
 			>
-				<Icon icon={fullscreen ? minimize2 : maximize2} class="h-3.5 w-3.5" />
+				<Icon icon={fullscreen ? minimize : maximize} class="h-3.5 w-3.5" />
 			</button>
 			<button
-				onclick={() => (collapsed = true)}
+				onclick={() => (collapsed = !collapsed)}
 				class="p-1 text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-panel rounded cursor-pointer transition-colors"
-				title="Collapse inspector"
+				title={collapsed ? 'Expand inspector' : 'Collapse inspector'}
 			>
-				<Icon icon={panelBottomClose} class="h-3.5 w-3.5" />
+				<Icon icon={collapsed ? chevronUp : chevronDown} class="h-3.5 w-3.5" />
 			</button>
+			{/if}
 		</div>
+		{/if}
 	</div>
 
 	<!-- LOG CONTENT AREA (TOP FLEX WRAPPER) -->
+	{#if !collapsed}
 	<div bind:this={logsContainerEl} class="flex-1 flex min-h-0 overflow-hidden">
 		<!-- LEFT FLEX PANEL: Log Table -->
 		<div class="flex-1 flex flex-col min-w-[320px] shrink-0 min-h-0 overflow-hidden">
@@ -553,5 +548,5 @@
 			</div>
 		{/if}
 	</div>
+	{/if}
 </div>
-{/if}
