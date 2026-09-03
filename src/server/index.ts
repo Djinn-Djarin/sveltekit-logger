@@ -9,5 +9,7 @@ export { createLogHandle, handle, handleError } from './handle.js';
 
 // Zero-code: wrapping the server-side global `fetch` means every outbound call
 // is captured automatically the moment this module is loaded.
-installServerFetchInterceptor();
-installServerConsoleInterceptor();
+if (process.env.NODE_ENV !== 'production') {
+	installServerFetchInterceptor();
+	installServerConsoleInterceptor();
+}

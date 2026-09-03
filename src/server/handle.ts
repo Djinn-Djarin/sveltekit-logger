@@ -1,5 +1,5 @@
 import type { Handle } from '@sveltejs/kit';
-import { pushLog, capBody } from './logStore.js';
+import { pushLog, capBody, isBinaryContent } from './logStore.js';
 
 export interface LogHandleOptions {
 	/** URL prefixes that must NOT be logged (the inspector's own endpoints). */
@@ -82,16 +82,26 @@ export function createLogHandle(options: LogHandleOptions = {}): Handle {
 		const response = await resolve(event);
 		const duration_ms = Math.round(performance.now() - t0);
 
-		// Capture response body (skip streaming responses to avoid hanging)
+		// Capture response body (skip streaming or compressed responses to avoid hanging/gibberish)
 		let responseBody: unknown = undefined;
-		const isStream = (response.headers.get('content-type') || '').includes('text/event-stream');
-		if (!isStream) {
+		const responseContentType = response.headers.get('content-type') || '';
+		const contentEncoding = response.headers.get('content-encoding') || '';
+		const isStream = responseContentType.includes('text/event-stream');
+		const isCompressed = /\b(gzip|br|deflate|zstd|compress)\b/i.test(contentEncoding);
+		if (!isStream && !isCompressed) {
 			try {
 				const resClone = response.clone();
-				responseBody = extractJsonText(await resClone.text());
+				const text = await resClone.text();
+				if (isBinaryContent(text)) {
+					responseBody = `[Compressed: ${contentEncoding || 'binary'}]`;
+				} else {
+					responseBody = extractJsonText(text);
+				}
 			} catch {
 				/* ignore clone/read error */
 			}
+		} else if (isCompressed) {
+			responseBody = `[Compressed: ${contentEncoding}]`;
 		}
 
 		// Force all error responses to detailed JSON (never HTML)

@@ -43,6 +43,7 @@ export function inspectLog(message: string, type: 'info' | 'warn' | 'error' | 's
  */
 export function initClientLogging(options: InitClientOptions = {}): () => void {
 	if (typeof window === 'undefined') return () => {};
+	if (import.meta.env.PROD) return () => {};
 	if (options.config) configureClient(options.config);
 
 	initGlobalErrorHandling();
@@ -68,6 +69,6 @@ export { stopLogStream, startLogStream, clientConfig };
 
 // Zero-code: importing the client module wires up console + error capture and
 // the log stream. The UI component calls initClientLogging() on mount too.
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && !import.meta.env.PROD) {
 	initGlobalErrorHandling();
 }

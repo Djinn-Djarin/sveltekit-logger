@@ -1,4 +1,4 @@
-import { pushLog, capBody, captureServerInitiator } from './logStore.js';
+import { pushLog, capBody, captureServerInitiator, isBinaryContent } from './logStore.js';
 
 export interface FetchInterceptorOptions {
 	/** Decide whether a given fetch should be logged. Default: everything except the inspector's own endpoints. */
@@ -74,20 +74,28 @@ export function installServerFetchInterceptor(options: FetchInterceptorOptions =
 		let responseBody: unknown;
 		if (logIt) {
 			const contentType = res.headers.get('content-type') || '';
-			if (!contentType.includes('text/event-stream')) {
+			const contentEncoding = res.headers.get('content-encoding') || '';
+			const isCompressed = /\b(gzip|br|deflate|zstd|compress)\b/i.test(contentEncoding);
+			if (!contentType.includes('text/event-stream') && !isCompressed) {
 				try {
 					const clone = res.clone();
 					const text = await clone.text();
 					if (text) {
-						try {
-							responseBody = JSON.parse(text);
-						} catch {
-							responseBody = text;
+						if (isBinaryContent(text)) {
+							responseBody = `[Compressed: ${contentEncoding || 'binary'}]`;
+						} else {
+							try {
+								responseBody = JSON.parse(text);
+							} catch {
+								responseBody = text;
+							}
 						}
 					}
 				} catch {
 					/* body not readable */
 				}
+			} else if (isCompressed) {
+				responseBody = `[Compressed: ${contentEncoding}]`;
 			}
 			pushLog({
 				method,

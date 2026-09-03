@@ -106,6 +106,7 @@ export function logInspector(options: LogInspectorPluginOptions = {}): Plugin {
 		config: {
 			order: 'pre',
 			handler(config) {
+				if (config.mode === 'production') return;
 				// Generate files here so they exist before kit's first sync.
 				root = config.root ?? root;
 				const log = (msg: string) => console.log(`[log-inspector] ${msg}`);

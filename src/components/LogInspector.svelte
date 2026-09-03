@@ -288,6 +288,7 @@
 	});
 </script>
 
+{#if !import.meta.env.PROD}
 <div class="w-full h-full flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden bg-theme-bg {className} {isDark ? '' : 'li-light'} {fullscreen ? '!fixed !inset-0 !z-[9999] !h-screen !w-screen' : ''}">
 	<!-- Toast -->
 	{#if toastMsg}
@@ -550,3 +551,4 @@
 	</div>
 	{/if}
 </div>
+{/if}

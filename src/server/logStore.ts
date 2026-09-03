@@ -37,6 +37,16 @@ export function capBody(body: unknown, maxChars = MAX_BODY_CHARS): unknown {
 	}
 }
 
+/** Detect binary/compressed content by checking magic bytes in the raw text. */
+export function isBinaryContent(text: string): boolean {
+	if (!text || text.length < 2) return false;
+	const first4 = text.charCodeAt(0) * 256 + text.charCodeAt(1);
+	if (first4 === 0x1f8b) return true; // gzip
+	if (first4 === 0x7801 || first4 === 0x789c || first4 === 0x78da) return true; // zlib/deflate
+	if (text.length > 10 && /[\x00-\x08\x0e-\x1f]/.test(text.slice(0, 20))) return true; // brotli / other
+	return false;
+}
+
 const MAX_LOGS = 500;
 
 /** AsyncLocalStorage carrying the initiating file/function (X-Initiator header). */
