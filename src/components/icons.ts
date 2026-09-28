@@ -25,8 +25,17 @@ import minimize2 from '@iconify-icons/lucide/minimize-2';
 import alertCircle from '@iconify-icons/lucide/alert-circle';
 import alertTriangle from '@iconify-icons/lucide/alert-triangle';
 import loader2 from '@iconify-icons/lucide/loader-2';
+import eye from '@iconify-icons/lucide/eye';
+
+const eyeclosed = {
+	body: '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m15 18-.722-3.25M2 8a10.645 10.645 0 0 0 20 0m-2 7-1.726-2.05M4 15l1.726-2.05M9 18l.722-3.25"/>',
+	width: 24,
+	height: 24
+};
 
 export {
+	eye,
+	eyeclosed,
 	search,
 	x,
 	chevronUp,

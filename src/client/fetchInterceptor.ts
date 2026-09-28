@@ -52,16 +52,49 @@ export function installClientFetchInterceptor(options: ClientFetchInterceptorOpt
 				const { terminalStore } = await import('./store.js');
 				const method = (requestInit?.method || (typeof input === 'string' ? 'GET' : 'GET')).toUpperCase();
 				const t0 = performance.now();
+				
+				// Capture request body
+				let requestBody;
+				if (requestInit?.body) {
+					try {
+						requestBody = typeof requestInit.body === 'string' ? JSON.parse(requestInit.body) : "(Binary/FormData)";
+					} catch {
+						requestBody = requestInit.body;
+					}
+				}
+
 				try {
 					const res = await originalFetch(input, requestInit);
 					const duration_ms = Math.round(performance.now() - t0);
+					
+					// Clone response to read body
+					let responseBody = undefined;
+					const contentType = res.headers.get('content-type') || '';
+					if (contentType.includes('application/json') || contentType.includes('text/')) {
+						try {
+							const cloned = res.clone();
+							const text = await cloned.text();
+							try {
+								responseBody = JSON.parse(text);
+							} catch {
+								responseBody = text;
+							}
+						} catch {
+							responseBody = "(Could not read body)";
+						}
+					} else {
+						responseBody = `(Binary/Unsupported type: ${contentType})`;
+					}
+
 					terminalStore.addLog(`[API] ${method} ${url} — ${res.ok ? 'success' : 'failed'} (HTTP ${res.status} · ${duration_ms}ms)`, res.ok ? 'success' : 'error', undefined, {
 						tag: 'api client',
 						method,
 						url,
 						status: res.status,
 						duration_ms,
-						initiator
+						initiator,
+						request_body: requestBody,
+						response_body: responseBody
 					});
 					return res;
 				} catch (err) {
@@ -72,7 +105,8 @@ export function installClientFetchInterceptor(options: ClientFetchInterceptorOpt
 						url,
 						status: 0,
 						duration_ms,
-						initiator
+						initiator,
+						request_body: requestBody
 					});
 					throw err;
 				}

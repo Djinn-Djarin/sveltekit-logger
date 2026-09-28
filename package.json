@@ -44,7 +44,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@iconify-icons/lucide": "^1.2.0",
+    "@iconify-icons/lucide": "^2.0.13",
     "@iconify/svelte": "^5.2.2"
   },
   "devDependencies": {
