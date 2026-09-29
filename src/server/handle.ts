@@ -44,7 +44,7 @@ function requestUrl(url: URL): string {
  * `sequence()` from `@sveltejs/kit/hooks` to keep an app's existing handle:
  *
  *   import { sequence } from '@sveltejs/kit/hooks';
- *   import { createLogHandle } from 'sveltekit-logger/server';
+ *   import { createLogHandle } from 'sveltekit-inspect/server';
  *   export const handle = sequence(myHandle, createLogHandle());
  */
 export function createLogHandle(options: LogHandleOptions = {}): Handle {

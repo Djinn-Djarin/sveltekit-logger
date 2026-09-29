@@ -1,3 +1,3 @@
-import { streamHandler } from 'sveltekit-logger/server';
+import { streamHandler } from 'sveltekit-inspect/server';
 
 export const GET = streamHandler();

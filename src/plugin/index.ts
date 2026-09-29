@@ -18,7 +18,7 @@ export interface LogInspectorPluginOptions {
 	};
 }
 
-const PKG = 'sveltekit-logger';
+const PKG = 'sveltekit-inspect';
 
 function writeIfMissing(file: string, content: string, log: (msg: string) => void): void {
 	if (existsSync(file)) return;
@@ -34,13 +34,13 @@ function writeIfMissing(file: string, content: string, log: (msg: string) => voi
  * The `LogInspector` component is NOT auto-mounted — add it yourself to your
  * root `+layout.svelte`:
  *
- *   import LogInspector from 'sveltekit-logger/components';
+ *   import LogInspector from 'sveltekit-inspect/components';
  *
  *   <LogInspector />
  *
  * Add this plugin to `vite.config.ts` BEFORE `sveltekit()`:
  *
- *   import { logInspector } from 'sveltekit-logger/plugin';
+ *   import { logInspector } from 'sveltekit-inspect/plugin';
  *   import { sveltekit } from '@sveltejs/kit/vite';
  *   export default defineConfig({ plugins: [logInspector(), sveltekit()] });
  */
@@ -97,7 +97,7 @@ export function logInspector(options: LogInspectorPluginOptions = {}): Plugin {
 	}
 
 	return {
-		name: 'sveltekit-logger',
+		name: 'sveltekit-inspect',
 		// Runs before SvelteKit's `vite-plugin-sveltekit-setup`, whose config hook
 		// is `config: { order: 'pre', ... }` and calls `sync.all()` — it captures
 		// the route manifest the build compiles from. Hook-level `order: 'pre'`
