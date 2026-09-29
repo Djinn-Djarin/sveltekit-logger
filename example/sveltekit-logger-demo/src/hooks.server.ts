@@ -1,4 +1,4 @@
-import { createLogHandle, handleError } from 'sveltekit-inspect/server';
+import { createLogHandle, handleError } from '@djarin/sveltekit-inspect/server';
 
 export const handle = createLogHandle({"skipPaths":["/__log-inspector"]});
 export { handleError };

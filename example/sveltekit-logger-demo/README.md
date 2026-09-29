@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-npx sv@0.17.1 create --template minimal --types ts --add playwright tailwindcss="plugins:none" --install npm sveltekit-inspect-demo
+npx sv@0.17.1 create --template minimal --types ts --add playwright tailwindcss="plugins:none" --install npm @djarin/sveltekit-inspect-demo
 ```
 
 ## Developing

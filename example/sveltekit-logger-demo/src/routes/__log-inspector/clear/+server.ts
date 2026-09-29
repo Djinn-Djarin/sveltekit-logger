@@ -1,3 +1,3 @@
-import { clearHandler } from 'sveltekit-inspect/server';
+import { clearHandler } from '@djarin/sveltekit-inspect/server';
 
 export const POST = clearHandler;
