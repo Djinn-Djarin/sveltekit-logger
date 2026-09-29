@@ -33,7 +33,11 @@
     "src",
     "README.md"
   ],
+  "workspaces": [
+    "example/sveltekit-logger-demo"
+  ],
   "scripts": {
+    "dev": "npm --prefix example/sveltekit-logger-demo run dev",
     "build": "tailwindcss -i ./src/components/theme.input.css -o ./src/components/theme.css --content \"./src/components/**/*.svelte\"",
     "build:min": "tailwindcss -i ./src/components/theme.input.css -o ./src/components/theme.css --content \"./src/components/**/*.svelte\" --minify",
     "check": "svelte-check --tsconfig ./tsconfig.json",
