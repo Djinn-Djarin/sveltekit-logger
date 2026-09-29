@@ -1,5 +1,7 @@
 # sveltekit-logger
 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/Djinn-Djarin/sveltekit-logger?file=example/sveltekit-logger-demo/src/routes/+page.svelte&terminal=dev)
+
 A unified, zero-code live log inspector for SvelteKit. Drop in the plugin, and every API call, server-side fetch, console log, and database operation is captured with its method, payload, status, duration, and a `file:line` initiator. 
 
 Everything is seamlessly streamed to an always-on, rich inspector panel in the corner of your app.
