@@ -1,6 +1,6 @@
 # sveltekit-logger
 
-[![npm version](https://img.shields.io/npm/v/sveltekit-logger.svg?style=flat-square)](https://www.npmjs.com/package/sveltekit-logger)
+[![npm version](https://img.shields.io/npm/v/@djarin/sveltekit-logger.svg?style=flat-square)](https://www.npmjs.com/package/@djarin/sveltekit-logger)
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/Djinn-Djarin/sveltekit-logger?file=example/sveltekit-logger-demo/src/routes/+page.svelte&terminal=dev)
 
 A unified, zero-code live log inspector for SvelteKit. Drop in the plugin, and every API call, server-side fetch, console log, and database operation is captured with its method, payload, status, duration, and a `file:line` initiator. 
@@ -23,7 +23,7 @@ Everything is seamlessly streamed to an always-on, rich inspector panel in the c
 ## Installation
 
 ```bash
-npm i -D sveltekit-logger
+npm i -D @djarin/sveltekit-logger
 ```
 
 ## Setup
@@ -34,7 +34,7 @@ In `vite.config.ts`, the plugin **must** be listed **before** `sveltekit()`:
 ```ts
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { logInspector } from 'sveltekit-logger/plugin';
+import { logInspector } from '@djarin/sveltekit-logger/plugin';
 
 export default defineConfig({
 	plugins: [logInspector(), sveltekit()]
@@ -48,8 +48,8 @@ In your root `src/routes/+layout.svelte`, initialize the client logger inside an
 
 ```svelte
 <script lang="ts">
-	import { initClientLogging } from 'sveltekit-logger/client';
-	import LogInspector from 'sveltekit-logger';
+	import { initClientLogging } from '@djarin/sveltekit-logger/client';
+	import LogInspector from '@djarin/sveltekit-logger';
 
 	let { children } = $props();
 
@@ -71,14 +71,14 @@ Sometimes you want to log data to the inspector UI to debug complex objects, but
 
 **Client-side:**
 ```ts
-import { inspectLog } from 'sveltekit-logger/client';
+import { inspectLog } from '@djarin/sveltekit-logger/client';
 
 inspectLog('User authenticated', 'success', { userId: 123 });
 ```
 
 **Server-side:**
 ```ts
-import { inspectLog } from 'sveltekit-logger/server';
+import { inspectLog } from '@djarin/sveltekit-logger/server';
 
 export async function load() {
     inspectLog('Loaded sensitive DB query', 'info', { rows: 400 });
@@ -93,7 +93,7 @@ If your app already has an existing `src/hooks.server.ts`, the auto-generator wi
 ```ts
 // src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { handle as logHandle, handleError } from 'sveltekit-logger/server';
+import { handle as logHandle, handleError } from '@djarin/sveltekit-logger/server';
 import { yourExistingHandle } from './my-handles';
 
 export const handle = sequence(yourExistingHandle, logHandle);
